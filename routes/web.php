@@ -4,6 +4,7 @@ use Illuminate\Support\Facades\Route;
 use App\Http\Controllers\ProductoController;
 use App\Http\Controllers\CategoriaController;
 use App\Http\Controllers\DashboardController;
+use App\Http\Controllers\ProduccionController;
 
 Route::get('/', function () {
     return view('welcome');
@@ -20,3 +21,7 @@ Route::resource('categorias', CategoriaController::class)
 // Ruta del Dashboard
 Route::get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
+
+// Ruta de Producción
+Route::resource('produccion', ProduccionController::class)
+    ->parameters(['produccion' => 'produccion']);

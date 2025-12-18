@@ -26,6 +26,7 @@ class="bg-[#EFE6D8] w-64 p-6 transition-all duration-300"
 <a href="/dashboard" class="block px-3 py-2 rounded hover:bg-[#E3D6C4]">Dashboard</a>
 <a href="/productos" class="block px-3 py-2 rounded hover:bg-[#E3D6C4]">Productos</a>
 <a href="/categorias" class="block px-3 py-2 rounded hover:bg-[#E3D6C4]">Categorías</a>
+<a href="/produccion" class="block px-3 py-2 rounded hover:bg-[#E3D6C4]">Producciones</a>
 </nav>
 </aside>
 

@@ -1,6 +1,6 @@
 @extends('layouts.app')
 
-@section('title', 'Categorías')
+@section('title', 'Listado de Categorías')
 
 @section('content')
 <div class="bg-[#F8F5F0] min-h-screen px-6 py-6">

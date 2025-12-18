@@ -1,7 +1,7 @@
 @extends('layouts.app')
 
 
-@section('title','Dashboard')
+@section('title','Panel de Control')
 
 
 @section('content')
@@ -19,6 +19,9 @@
 <p class="text-3xl font-bold">{{ $totalCategorias }}</p>
 </div>
 
-
+<div class="bg-white p-6 rounded-xl shadow">
+<h3 class="text-sm text-gray-500">Producciones</h3>
+<p class="text-3xl font-bold">{{ $totalProducciones }}</p>
 </div>
+
 @endsection
