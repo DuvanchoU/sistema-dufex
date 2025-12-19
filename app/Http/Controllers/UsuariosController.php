@@ -7,16 +7,48 @@ use App\Models\Roles;
 use App\Http\Requests\StoreUsuariosRequest;
 use App\Http\Requests\UpdateUsuariosRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class UsuariosController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $usuarios = Usuario::with('rol')
-            ->orderBy('nombres')
-            ->paginate(15);
-        return view('usuarios.index', compact('usuarios'));
+        $query = Usuario::with('rol')->orderBy('nombres');
+
+        // Filtros
+        if ($request->filled('nombre')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nombres', 'LIKE', '%' . $request->nombre . '%')
+                ->orWhere('apellidos', 'LIKE', '%' . $request->nombre . '%');
+            });
+        }
+
+        if ($request->filled('documento')) {
+            $query->where('documento', 'LIKE', '%' . $request->documento . '%');
+        }
+
+        if ($request->filled('correo_usuario')) {
+            $query->where('correo_usuario', 'LIKE', '%' . $request->correo_usuario . '%');
+        }
+
+        if ($request->filled('rol_id')) {
+            $query->where('id_rol', $request->rol_id);
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        if ($request->filled('genero')) {
+            $query->where('genero', $request->genero);
+        }
+
+        $usuarios = $query->paginate(15)->appends($request->query());
+
+        $roles = Roles::all(['id_rol', 'nombre_rol']);
+
+        return view('usuarios.index', compact('usuarios', 'roles'));
     }
 
     public function create(): View

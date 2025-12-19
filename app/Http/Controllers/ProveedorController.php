@@ -6,13 +6,38 @@ use App\Models\Proveedor;
 use App\Http\Requests\StoreProveedorRequest;
 use App\Http\Requests\UpdateProveedorRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProveedorController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $proveedores = Proveedor::orderBy('nombre')->paginate(15);
+        $query = Proveedor::orderBy('nombre');
+
+        // Filtros
+        if ($request->filled('nombre')) {
+            $query->where('nombre', 'LIKE', '%' . $request->nombre . '%');
+        }
+
+        if ($request->filled('telefono')) {
+            $query->where('telefono', 'LIKE', '%' . $request->telefono . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'LIKE', '%' . $request->email . '%');
+        }
+
+        if ($request->filled('direccion')) {
+            $query->where('direccion', 'LIKE', '%' . $request->direccion . '%');
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        $proveedores = $query->paginate(15)->appends($request->query());
+
         return view('proveedores.index', compact('proveedores'));
     }
 

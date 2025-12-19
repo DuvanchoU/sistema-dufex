@@ -23,7 +23,7 @@ class DashboardController extends Controller
             'totalUsuarios' => \App\Models\Usuario::count(),
             'totalVentas'=> \App\Models\Venta::count(),
             'totalPedidos'=> \App\Models\Pedido::count(),
-            'totalCompras'=> \App\Models\Compra::count(),
+            'totalCompras'=> \App\Models\Compra::count(),           
         ]);
     }
 }

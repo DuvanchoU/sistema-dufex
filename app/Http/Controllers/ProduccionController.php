@@ -7,16 +7,43 @@ use App\Models\Producto;
 use App\Http\Requests\StoreProduccionRequest;
 use App\Http\Requests\UpdateProduccionRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProduccionController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $producciones = Produccion::with('producto')
-            ->orderBy('fecha_inicio', 'desc')
-            ->paginate(15);
-        return view('produccion.index', compact('producciones'));
+        $query = Produccion::with('producto');
+
+        // Filtros
+        if ($request->filled('producto_id')) {
+            $query->where('producto_id', $request->producto_id);
+        }
+
+        if ($request->filled('estado_produccion')) {
+            $query->where('estado_produccion', $request->estado_produccion);
+        }
+
+        if ($request->filled('observaciones')) {
+            $query->where('observaciones', 'LIKE', '%' . $request->observaciones . '%');
+        }
+
+        if ($request->filled('fecha_inicio')) {
+            $query->whereDate('fecha_inicio', '>=', $request->fecha_inicio);
+        }
+
+        if ($request->filled('fecha_fin')) {
+            $query->whereDate('fecha_fin', '<=', $request->fecha_fin);
+        }
+
+        $producciones = $query->orderBy('fecha_inicio', 'desc')
+                            ->paginate(15)
+                            ->appends($request->query());
+
+        $productos = Producto::all(['id_producto', 'codigo_producto', 'referencia_producto']);
+
+        return view('produccion.index', compact('producciones', 'productos'));
     }
 
     public function create(): View

@@ -11,15 +11,19 @@
                 <p class="text-sm text-gray-500 mt-1">ID: {{ $role->id_rol }}</p>
             </div>
             <div class="flex gap-2">
-                <a href="{{ route('roles.edit', $role->id_rol) }}"
-                   class="px-3 py-1.5 bg-yellow-100 text-yellow-700 text-sm rounded-md font-medium hover:bg-yellow-200 transition">
-                    Editar
-                </a>
-                <a href="{{ route('roles.index') }}"
-                   class="px-3 py-1.5 bg-gray-200 text-gray-800 text-sm rounded-md font-medium hover:bg-gray-300 transition">
-                    Volver
-                </a>
-            </div>
+            <a href="{{ route('roles.edit', $role->id_rol) }}"
+            class="px-3 py-1.5 bg-yellow-100 text-yellow-700 text-sm rounded-md font-medium hover:bg-yellow-200 transition">
+                Editar
+            </a>
+            <a href="{{ route('roles.permisos', $role->id_rol) }}"
+            class="px-3 py-1.5 bg-[#CBB8A0] hover:bg-[#B9A489] text-white rounded-lg font-medium transition shadow-sm">
+                Permisos
+            </a>
+            <a href="{{ route('roles.index') }}"
+            class="px-3 py-1.5 bg-gray-200 text-gray-800 text-sm rounded-md font-medium hover:bg-gray-300 transition">
+                Volver
+            </a>
+        </div>
         </div>
 
         <div class="space-y-5">

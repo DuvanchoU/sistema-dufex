@@ -7,15 +7,50 @@ use App\Models\Categoria;
 use App\Http\Requests\StoreProductoRequest;
 use App\Http\Requests\UpdateProductoRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ProductoController extends Controller
 {   
     // Muestra una lista paginada de productos con su categoría.
-    public function index(): View
-    {   
-        $productos = Producto::with('categoria')->paginate(15);
-        return view('productos.index', compact('productos'));
+    public function index(Request $request): View
+    {
+        $query = Producto::with('categoria')->whereNull('deleted_at'); // respetar soft deletes
+
+        // Filtros
+        if ($request->filled('codigo')) {
+            $query->where('codigo_producto', 'LIKE', '%' . $request->codigo . '%');
+        }
+
+        if ($request->filled('referencia')) {
+            $query->where('referencia_producto', 'LIKE', '%' . $request->referencia . '%');
+        }
+
+        if ($request->filled('categoria_id')) {
+            $query->where('categoria_id', $request->categoria_id);
+        }
+
+        if ($request->filled('precio_min')) {
+            $query->where('precio_actual', '>=', $request->precio_min);
+        }
+
+        if ($request->filled('precio_max')) {
+            $query->where('precio_actual', '<=', $request->precio_max);
+        }
+
+        if ($request->filled('tipo_madera')) {
+            $query->where('tipo_madera', 'LIKE', '%' . $request->tipo_madera . '%');
+        }
+
+        if ($request->filled('color')) {
+            $query->where('color_producto', 'LIKE', '%' . $request->color . '%');
+        }
+
+        $productos = $query->paginate(15)->appends($request->query());
+
+        $categorias = Categoria::all(['id_categorias', 'nombre_categoria']);
+
+        return view('productos.index', compact('productos', 'categorias'));
     }
 
     public function create(): View

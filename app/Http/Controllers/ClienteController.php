@@ -6,13 +6,45 @@ use App\Models\Cliente;
 use App\Http\Requests\StoreClienteRequest;
 use App\Http\Requests\UpdateClienteRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class ClienteController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $clientes = Cliente::orderBy('nombre')->paginate(15);
+        $query = Cliente::orderBy('nombre');
+
+        // Filtros
+        if ($request->filled('nombre')) {
+            $query->where(function ($q) use ($request) {
+                $q->where('nombre', 'LIKE', '%' . $request->nombre . '%')
+                ->orWhere('apellido', 'LIKE', '%' . $request->nombre . '%');
+            });
+        }
+
+        if ($request->filled('telefono')) {
+            $query->where('telefono', 'LIKE', '%' . $request->telefono . '%');
+        }
+
+        if ($request->filled('email')) {
+            $query->where('email', 'LIKE', '%' . $request->email . '%');
+        }
+
+        if ($request->filled('direccion')) {
+            $query->where('direccion', 'LIKE', '%' . $request->direccion . '%');
+        }
+
+        if ($request->filled('fecha')) {
+            $query->whereDate('fecha_registro', '>=', $request->fecha);
+        }
+
+        if ($request->filled('estado')) {
+            $query->where('estado', $request->estado);
+        }
+
+        $clientes = $query->paginate(15)->appends($request->query());
+
         return view('clientes.index', compact('clientes'));
     }
 

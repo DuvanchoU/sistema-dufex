@@ -7,6 +7,8 @@ use App\Http\Requests\StoreRolesRequest;
 use App\Http\Requests\UpdateRolesRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
+use App\Models\Permiso;
 
 class RolesController extends Controller
 {
@@ -52,5 +54,24 @@ class RolesController extends Controller
         $role = Roles::findOrFail($id_rol);
         $role->delete();
         return redirect()->route('roles.index')->with('success', 'Rol dado de baja exitosamente.');
+    }
+
+    public function permisos(Roles $rol): View
+    {
+        $permisos = Permiso::all();
+        return view('roles.permisos', compact('rol', 'permisos'));
+    }
+
+    public function actualizarPermisos(Request $request, Roles $rol): RedirectResponse
+    {
+        $request->validate([
+            'permisos' => 'array',
+            'permisos.*' => 'exists:permisos,id_permiso',
+        ]);
+
+        // Sincroniza los permisos seleccionados
+        $rol->permisos()->sync($request->permisos ?? []);
+
+        return redirect()->route('roles.permisos', $rol)->with('success', 'Permisos actualizados exitosamente.');
     }
 }

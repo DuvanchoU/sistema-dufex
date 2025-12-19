@@ -11,18 +11,58 @@ use App\Models\Usuario;
 use App\Http\Requests\StoreVentaRequest;
 use Illuminate\Http\RedirectResponse;
 use Illuminate\View\View;
+use Illuminate\Http\Request;
 use Illuminate\Support\Facades\DB;
 use Illuminate\Support\Facades\Log;
 use Illuminate\Support\Facades\Auth;
 
 class VentaController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $ventas = Venta::with('usuario', 'cliente', 'metodoPago')
-            ->orderBy('fecha_venta', 'desc')
-            ->paginate(15);
-        return view('ventas.index', compact('ventas'));
+        $query = Venta::with('usuario', 'cliente', 'metodoPago')->orderBy('fecha_venta', 'desc');
+
+        // Filtros
+        if ($request->filled('cliente_id')) {
+            $query->where('cliente_id', $request->cliente_id);
+        }
+
+        if ($request->filled('usuario_id')) {
+            $query->where('usuario_id', $request->usuario_id);
+        }
+
+        if ($request->filled('metodo_pago_id')) {
+            $query->where('metodo_pago_id', $request->metodo_pago_id);
+        }
+
+        if ($request->filled('estado_venta')) {
+            $query->where('estado_venta', $request->estado_venta);
+        }
+
+        if ($request->filled('fecha_desde')) {
+            $query->whereDate('fecha_venta', '>=', $request->fecha_desde);
+        }
+
+        if ($request->filled('fecha_hasta')) {
+            $query->whereDate('fecha_venta', '<=', $request->fecha_hasta);
+        }
+
+        if ($request->filled('total_min')) {
+            $query->where('total_venta', '>=', $request->total_min);
+        }
+
+        if ($request->filled('total_max')) {
+            $query->where('total_venta', '<=', $request->total_max);
+        }
+
+        $ventas = $query->paginate(15)->appends($request->query());
+
+        // Cargar listas para los selects
+        $clientes = Cliente::where('estado', 'ACTIVO')->get(['id_cliente', 'nombre', 'apellido']);
+        $usuarios = Usuario::where('estado', 'ACTIVO')->get(['id_usuario', 'nombres']);
+        $metodosPago = MetodoPago::all(['id_metodo', 'nombre']);
+
+        return view('ventas.index', compact('ventas', 'clientes', 'usuarios', 'metodosPago'));
     }
 
     public function create(): View
