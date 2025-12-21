@@ -26,6 +26,10 @@ class StoreProductoRequest extends FormRequest
             'tipo_madera' => 'nullable|string|max:45',
             'color_producto' => 'nullable|string|max:45',
             'precio_actual' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
+            'imagenes' => 'required|array|min:1', // al menos una imagen
+            'imagenes.*' => 'required|image|mimes:jpeg,png,jpg,gif|max:2048',
+            'descripcion_imagen' => 'nullable|array',
+            'descripcion_imagen.*' => 'nullable|string|max:255',
         ];
     }
 

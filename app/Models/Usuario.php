@@ -9,6 +9,7 @@ use App\Models\Roles;
 use App\Models\Venta;
 use App\Models\Compra;
 use App\Models\Pedido;
+use App\Models\Permiso;
 
 class Usuario extends Authenticatable
 {   
@@ -60,7 +61,26 @@ class Usuario extends Authenticatable
 
     public function rol()
     {
-        return $this->belongsTo(Roles::class, 'id_rol', 'id_rol');
+        return $this->belongsTo(
+            \App\Models\Roles::class,
+            'id_rol',
+            'id_rol'
+        );
+    }
+
+    // Depende de sus permisos, el usuario verá los módulos disponibles
+    public function tienePermiso(string $nombrePermiso): bool
+    {
+        if (!$this->rol) {
+            return false;
+        }
+
+        // Normalizar a minúsculas y quitar espacios
+        $nombreNormalizado = strtolower(trim($nombrePermiso));
+
+        return $this->rol->permisos()
+            ->whereRaw('LOWER(nombre_permiso) = ?', [$nombreNormalizado])
+            ->exists();
     }
 
     public function getEmailForPasswordReset()
@@ -78,4 +98,5 @@ class Usuario extends Authenticatable
     {
         return 'id_usuario';
     }
+    
 }

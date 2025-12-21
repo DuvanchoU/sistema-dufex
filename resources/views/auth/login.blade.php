@@ -1,11 +1,12 @@
-@extends('layouts.app')
+@extends('layouts.login')
 
 @section('title', 'Iniciar Sesión')
 
 @section('content')
-<div class="max-w-md mx-auto mt-20 p-6 bg-white rounded-lg shadow-sm border border-gray-200">
+<div class="max-w-md mx-auto p-6 bg-white rounded-lg shadow-sm border border-gray-200">
     <div class="text-center mb-6">
-        <h1 class="text-2xl font-bold text-gray-800">OrderRae</h1>
+        <!-- Logo -->
+        <img src="{{ asset('images/logo dufex.png') }}" alt="ORDER R.A.E" class="mx-auto h-16 w-auto">
         <p class="text-gray-600 mt-2">Inicia sesión para continuar</p>
     </div>
 

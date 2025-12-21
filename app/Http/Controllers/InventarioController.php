@@ -51,9 +51,12 @@ class InventarioController extends Controller
             $query->where('cantidad_disponible', '<=', $request->cantidad_max);
         }
 
-        $inventarios = $query->orderBy('fecha_llegada', 'desc')
-                            ->paginate(15)
-                            ->appends($request->query());
+        // ORDENAR POR CÓDIGO DEL PRODUCTO (usando join)
+        $query->leftJoin('producto', 'inventario.producto_id', '=', 'producto.id_producto')
+            ->orderBy('producto.codigo_producto', 'ASC')
+            ->select('inventario.*');
+
+        $inventarios = $query->paginate(15)->appends($request->query());
 
         // Cargar listas para los selects
         $productos = Producto::all(['id_producto', 'codigo_producto', 'referencia_producto']);

@@ -16,7 +16,7 @@
         </div>
     @endif
 
-    <form action="{{ route('productos.store') }}" method="POST">
+    <form action="{{ route('productos.store') }}" method="POST" enctype="multipart/form-data">
         @csrf
 
         <div class="mb-5">
@@ -32,7 +32,7 @@
         </div>
 
         <div class="mb-5">
-            <label for="referencia_producto" class="block text-sm font-medium text-gray-700 mb-1">Referencia (opcional)</label>
+            <label for="referencia_producto" class="block text-sm font-medium text-gray-700 mb-1">Referencia</label>
             <input
                 type="text"
                 name="referencia_producto"
@@ -60,7 +60,7 @@
         </div>
 
         <div class="mb-5">
-            <label for="tipo_madera" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Madera (opcional)</label>
+            <label for="tipo_madera" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Madera</label>
             <input
                 type="text"
                 name="tipo_madera"
@@ -82,7 +82,7 @@
         </div>
 
         <div class="mb-6">
-            <label for="precio_actual" class="block text-sm font-medium text-gray-700 mb-1">Precio Actual ($)*</label>
+            <label for="precio_actual" class="block text-sm font-medium text-gray-700 mb-1">($) Precio Actual*</label>
             <input
                 type="number"
                 step="0.01"
@@ -94,6 +94,33 @@
                 required
             >
         </div>
+
+        <!-- Galería de Imágenes -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Imágenes del Producto</label>
+            <div id="imagenes-container">
+                <div class="flex items-center mb-2">
+                    <input type="file" name="imagenes[]" accept="image/*" class="mr-2" required>
+                    <input type="text" name="descripcion_imagen[]" placeholder="Descripción (opcional)" class="flex-1 mr-2 border rounded px-2">
+                    <button type="button" onclick="agregarImagen()" class="bg-green-500 text-white px-2 rounded">+</button>
+                </div>
+            </div>
+            <p class="text-xs text-gray-500">Primera imagen será la principal. Formatos: JPG, PNG (máx. 2MB)</p>
+        </div>
+
+        <script>
+        function agregarImagen() {
+            const container = document.getElementById('imagenes-container');
+            const div = document.createElement('div');
+            div.className = 'flex items-center mb-2';
+            div.innerHTML = `
+                <input type="file" name="imagenes[]" accept="image/*" class="mr-2">
+                <input type="text" name="descripcion_imagen[]" placeholder="Descripción (opcional)" class="flex-1 mr-2 border rounded px-2">
+                <button type="button" onclick="this.parentElement.remove()" class="bg-red-500 text-white px-2 rounded">-</button>
+            `;
+            container.appendChild(div);
+        }
+        </script>
 
         <div class="flex justify-end space-x-3">
             <a href="{{ route('productos.index') }}" 

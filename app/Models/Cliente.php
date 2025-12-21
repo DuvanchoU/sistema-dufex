@@ -4,6 +4,7 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\HasMany;
 
 class Cliente extends Model
 {
@@ -28,29 +29,20 @@ class Cliente extends Model
         'deleted_at' => 'datetime',
     ];
 
-    public function getRouteKeyName()
+    // Relaciones
+    public function pedidos(): HasMany
     {
-        return 'id_cliente';
-    }
-    
-    // Ventas realizadas al cliente
-    public function ventas()
-    {
-        return $this->hasMany(
-            Venta::class,
-            'cliente_id',
-            'id_cliente'
-        );
+        return $this->hasMany(Pedido::class, 'cliente_id', 'id_cliente');
     }
 
-    // Pedidos realizados por el cliente
-    public function pedidos()
+    public function ventas(): HasMany
     {
-        return $this->hasMany(
-            Pedido::class,
-            'cliente_id',
-            'id_cliente'
-        );
+        return $this->hasMany(Venta::class, 'cliente_id', 'id_cliente');
     }
-    
+
+    // Carrito actual del cliente
+    public function carrito(): \Illuminate\Database\Eloquent\Relations\HasOne
+    {
+        return $this->hasOne(Carrito::class, 'cliente_id', 'id_cliente');
+    }
 }

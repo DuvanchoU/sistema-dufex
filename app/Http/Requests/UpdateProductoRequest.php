@@ -28,7 +28,9 @@ class UpdateProductoRequest extends FormRequest
             'tipo_madera' => 'nullable|string|max:45',
             'color_producto' => 'nullable|string|max:45',
             'precio_actual' => 'required|numeric|min:0|regex:/^\d+(\.\d{1,2})?$/',
-        ];
+            'imagenes' => 'nullable|image|mimes:jpeg,png,jpg,gif|max:2048', // Una sola imagen
+            'descripcion_imagen' => 'nullable|string|max:255',
+            ];
     }
 
     public function messages(): array

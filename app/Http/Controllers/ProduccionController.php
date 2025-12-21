@@ -37,9 +37,12 @@ class ProduccionController extends Controller
             $query->whereDate('fecha_fin', '<=', $request->fecha_fin);
         }
 
-        $producciones = $query->orderBy('fecha_inicio', 'desc')
-                            ->paginate(15)
-                            ->appends($request->query());
+        // ORDENAR POR CÓDIGO DEL PRODUCTO (usando join)
+        $query->leftJoin('producto', 'produccion.producto_id', '=', 'producto.id_producto')
+            ->orderBy('producto.codigo_producto', 'ASC')
+            ->select('produccion.*');
+
+        $producciones= $query->paginate(15)->appends($request->query());
 
         $productos = Producto::all(['id_producto', 'codigo_producto', 'referencia_producto']);
 

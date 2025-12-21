@@ -50,6 +50,9 @@ class CompraController extends Controller
             $query->where('total_compra', '<=', $request->total_max);
         }
 
+        // Ordenar alfabéticamente
+        $query->orderBy('fecha_compra', 'DESC');
+
         $compras = $query->paginate(15)->appends($request->query());
 
         // Cargar listas para los selects

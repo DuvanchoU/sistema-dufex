@@ -43,5 +43,10 @@ class Proveedor extends Model
             'proveedor_id',
             'id_proveedor'
         );
+    }   
+
+    public function getRouteKeyName()
+    {
+        return 'id_proveedor';
     }
 }

@@ -2,109 +2,100 @@
 
 use App\Http\Controllers\Auth\LoginController;
 use Illuminate\Support\Facades\Route;
-use App\Http\Controllers\ProductoController;
-use App\Http\Controllers\CategoriaController;
-use App\Http\Controllers\DashboardController;
-use App\Http\Controllers\ProduccionController;
-use App\Http\Controllers\UsuariosController;
-use App\Http\Controllers\RolesController;
-use App\Http\Controllers\InventarioController;
-use App\Http\Controllers\ProveedorController;
-use App\Http\Controllers\BodegaController;
-use App\Http\Controllers\VentaController;
-use App\Http\Controllers\ClienteController;
-use App\Http\Controllers\MetodoPagoController;
-use App\Http\Controllers\PedidoController;
-use App\Http\Controllers\CompraController;
-use App\Http\Controllers\PermisoController;
-
-use App\Http\Controllers\Reportes\ComprasPorClienteController;
+use App\Http\Controllers\{
+    ProductoController,
+    CategoriaController,
+    DashboardController,
+    ProduccionController,
+    UsuariosController,
+    RolesController,
+    InventarioController,
+    ProveedorController,
+    BodegaController,
+    VentaController,
+    ClienteController,
+    MetodoPagoController,
+    PedidoController,
+    CompraController,
+    PermisoController,
+    TiendaController,
+    CarritoController,
+    CheckoutController
+};
 
 Route::get('/', function () {
     return view('welcome');
 });
 
-// Rutas de autenticación
+// ---------------- AUTH ----------------
 Route::get('/login', [LoginController::class, 'showLoginForm'])->name('login');
 Route::post('/login', [LoginController::class, 'login']);
 Route::post('/logout', [LoginController::class, 'logout'])->name('logout');
 
-// Ruta del Dashboard , rutas protegidas
-Route::middleware('auth')->group(function () {
-Route::get('/dashboard', [DashboardController::class, 'index'])
+// ---------------- DASHBOARD ----------------
+Route::middleware('auth')->get('/dashboard', [DashboardController::class, 'index'])
     ->name('dashboard');
 
-// Ruta de Productos
-Route::resource('productos', ProductoController::class)
+// ---------------- OPERACIÓN ----------------
+Route::middleware(['auth','permiso:ver_productos'])->resource('productos', ProductoController::class)
     ->parameters(['productos' => 'producto']);
 
-// Ruta de Categorías
-Route::resource('categorias', CategoriaController::class)
+Route::middleware(['auth','permiso:ver_categorias'])->resource('categorias', CategoriaController::class)
     ->parameters(['categorias' => 'categoria']);
 
-// Ruta de Producción
-Route::resource('produccion', ProduccionController::class)
-    ->parameters(['produccion' => 'produccion']);
+Route::middleware(['auth','permiso:ver_inventario'])->resource('inventario', InventarioController::class);
 
-// Ruta de Usuarios
-Route::resource('usuarios', UsuariosController::class)
-    ->parameters(['usuarios' => 'usuario']);
+Route::middleware(['auth','permiso:ver_produccion'])->resource('produccion', ProduccionController::class);
 
-// Ruta de Roles
-Route::resource('roles', RolesController::class)
-    ->parameters(['roles' => 'rol']);
+Route::middleware(['auth','permiso:ver_bodegas'])->resource('bodegas', BodegaController::class);
 
-// Gestión de permisos por rol
-Route::get('/roles/{rol}/permisos', [RolesController::class, 'permisos'])->name('roles.permisos'); //  ver y editar permisos
-Route::put('/roles/{rol}/permisos', [RolesController::class, 'actualizarPermisos'])->name('roles.permisos.update'); // guardar cambios
+Route::middleware(['auth','permiso:ver_proveedores'])->resource('proveedores', ProveedorController::class);
 
-// Ruta de Inventario
-Route::resource('inventario', InventarioController::class)
-    ->parameters(['inventario' => 'inventario']);
+// ---------------- COMERCIAL ----------------
+Route::middleware(['auth','permiso:ver_clientes'])->resource('clientes', ClienteController::class);
 
-// Ruta de Proveedores
-Route::resource('proveedores', ProveedorController::class)
-    ->parameters(['proveedores' => 'proveedor']);
+Route::middleware(['auth','permiso:ver_ventas'])->resource('ventas', VentaController::class)
+    ->except(['edit','update']);
 
-// Ruta de Bodegas
-Route::resource('bodegas', BodegaController::class)
-    ->parameters(['bodegas' => 'bodega']);
+Route::middleware(['auth','permiso:ver_pedidos'])->resource('pedidos', PedidoController::class);
 
-// Ruta de Ventas
-Route::resource('ventas', VentaController::class)
-    ->except(['edit', 'update']);
+Route::middleware(['auth','permiso:ver_compras'])->resource('compras', CompraController::class);
 
-// Ruta de Clientes
-Route::resource('clientes', ClienteController::class);
-
-// Ruta de Metodo De Pago
-Route::resource('metodos_pago', MetodoPagoController::class)
+Route::middleware(['auth','permiso:ver_metodos_pago'])->resource('metodos_pago', MetodoPagoController::class)
     ->parameters(['metodos_pago'=> 'metodopago']);
 
-// Ruta de Pedido
-Route::resource('pedidos', PedidoController::class)
-    ->parameters(['pedidos'=> 'pedido']);
+// ---------------- SEGURIDAD ----------------
+Route::middleware(['auth','permiso:ver_usuarios'])->resource('usuarios', UsuariosController::class);
 
-// Ruta de Compras
-Route::resource('compras', CompraController::class)
-    ->parameters(['compras' => 'compra']);
+Route::middleware(['auth','permiso:ver_roles'])->resource('roles', RolesController::class)
+    ->parameters(['roles' => 'rol']);
 
-// Ruta de Permisos
-Route::resource('permisos', PermisoController::class)
+Route::middleware(['auth','permiso:ver_roles'])->get('/roles/{rol}/permisos', [RolesController::class, 'permisos'])
+    ->name('roles.permisos');
+
+Route::middleware(['auth','permiso:ver_roles'])->put('/roles/{rol}/permisos', [RolesController::class, 'actualizarPermisos'])
+    ->name('roles.permisos.update');
+
+Route::middleware(['auth','permiso:ver_permisos'])->resource('permisos', PermisoController::class)
     ->parameters(['permisos' => 'permiso']);
 
-/////////////////////////////////////////////////////////
 
-// Grupo de reportes
-Route::prefix('reportes')->name('reportes.')->group(function () {
-    Route::get('/compras-por-cliente', [ComprasPorClienteController::class, 'index'])
-        ->name('compras-por-cliente');
-      
-    Route::get('/compras-por-cliente/excel', [ComprasPorClienteController::class, 'exportExcel'])
-        ->name('compras-por-cliente.excel');
+// ---------------- RUTAS PÚBLICAS (TIENDA) ----------------
+Route::prefix('tienda')->name('tienda.')->group(function () {
+    Route::get('/', [TiendaController::class, 'index'])->name('index');
+    Route::get('/categoria/{categoria}', [TiendaController::class, 'categoria'])->name('categoria');
+    Route::get('/producto/{producto}', [TiendaController::class, 'producto'])->name('producto');
+    
+    Route::get('/carrito', [CarritoController::class, 'index'])->name('carrito');
+    Route::post('/carrito/agregar/{productoId}', [CarritoController::class, 'agregar'])->name('carrito.agregar');
+    Route::put('/carrito/actualizar/{itemId}', [CarritoController::class, 'actualizar'])->name('carrito.actualizar');
+    Route::delete('/carrito/eliminar/{itemId}', [CarritoController::class, 'eliminar'])->name('carrito.eliminar');
 
-    Route::get('/compras-por-cliente/pdf', [ComprasPorClienteController::class, 'exportPdf'])
-        ->name('compras-por-cliente.pdf');
-}
-);
+    Route::get('/checkout', [CheckoutController::class, 'index'])->name('checkout');
+    Route::post('/checkout/procesar', [CheckoutController::class, 'procesar'])->name('checkout.procesar');
 });
+
+// ---------------- RUTA PARA GRACIAS DESPUÉS DE COMPRA ----------------
+Route::get('/gracias/{pedido}', function ($pedido) {
+    return view('tienda.gracias', compact('pedido'));
+})->name('gracias');

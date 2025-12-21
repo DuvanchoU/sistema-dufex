@@ -16,7 +16,7 @@
         </div>
     @endif
 
-    <form action="{{ route('productos.update', $producto->id_producto) }}" method="POST">
+    <form action="{{ route('productos.update', $producto->id_producto) }}" method="POST" enctype="multipart/form-data">
         @csrf
         @method('PUT')
 
@@ -33,7 +33,7 @@
         </div>
 
         <div class="mb-5">
-            <label for="referencia_producto" class="block text-sm font-medium text-gray-700 mb-1">Referencia (opcional)</label>
+            <label for="referencia_producto" class="block text-sm font-medium text-gray-700 mb-1">Referencia</label>
             <input
                 type="text"
                 name="referencia_producto"
@@ -62,7 +62,7 @@
         </div>
 
         <div class="mb-5">
-            <label for="tipo_madera" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Madera (opcional)</label>
+            <label for="tipo_madera" class="block text-sm font-medium text-gray-700 mb-1">Tipo de Madera</label>
             <input
                 type="text"
                 name="tipo_madera"
@@ -84,7 +84,7 @@
         </div>
 
         <div class="mb-6">
-            <label for="precio_actual" class="block text-sm font-medium text-gray-700 mb-1">Precio Actual ($)*</label>
+            <label for="precio_actual" class="block text-sm font-medium text-gray-700 mb-1">($) Precio Actual *</label>
             <input
                 type="number"
                 step="0.01"
@@ -96,6 +96,46 @@
                 required
             >
         </div>
+
+        <!-- Imágenes existentes -->
+        @if($producto->imagenes->count())
+            <div class="mb-4">
+                <label class="block text-sm font-medium text-gray-700 mb-2">Imágenes actuales</label>
+                <div class="grid grid-cols-3 gap-2">
+                    @foreach($producto->imagenes as $imagen)
+                        <div class="relative">
+                            <img src="{{ asset('storage/' . $imagen->ruta_imagen) }}" class="h-24 object-cover rounded">
+                            <span class="absolute bottom-0 left-0 bg-black bg-opacity-50 text-white text-xs px-1">{{ $imagen->descripcion ?? 'Sin descripción' }}</span>
+                            @if($imagen->es_principal)
+                                <span class="absolute top-0 right-0 bg-yellow-500 text-white text-xs px-1">Principal</span>
+                            @endif
+                        </div>
+                    @endforeach
+                </div>
+            </div>
+        @endif
+
+        <!-- Nuevas imágenes -->
+        <div class="mb-4">
+            <label class="block text-sm font-medium text-gray-700 mb-2">Reemplazar imagen principal</label>
+            <input type="file" name="imagenes" accept="image/*" class="block w-full">
+            <input type="text" name="descripcion_imagen" placeholder="Descripción (opcional)" class="mt-2 w-full border rounded px-2">
+            <p class="text-xs text-gray-500 mt-1">Formatos: JPG, PNG (máx. 2MB)</p>
+        </div>
+
+        <script>
+        function agregarImagen() {
+            const container = document.getElementById('imagenes-container');
+            const div = document.createElement('div');
+            div.className = 'flex items-center mb-2';
+            div.innerHTML = `
+                <input type="file" name="imagenes" accept="image/*" class="mr-2">
+                <input type="text" name="descripcion_imagen" placeholder="Descripción (opcional)" class="flex-1 mr-2 border rounded px-2">
+                <button type="button" onclick="this.parentElement.remove()" class="bg-red-500 text-white px-2 rounded">-</button>
+            `;
+            container.appendChild(div);
+        }
+        </script>
 
         <div class="flex justify-end space-x-3">
             <a href="{{ route('productos.index') }}" 

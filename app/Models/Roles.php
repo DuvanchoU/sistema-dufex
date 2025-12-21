@@ -27,7 +27,7 @@ class Roles extends Model
 
     protected $dates = ['deleted_at'];
     
-    // Permisos asociados a este rol   
+    // Un rol TIENE MUCHOS permisos
     public function permisos()
     {
         return $this->belongsToMany(

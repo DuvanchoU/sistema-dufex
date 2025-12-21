@@ -5,17 +5,28 @@ namespace App\Http\Controllers;
 use App\Models\Pedido;
 use App\Models\Usuario;
 use App\Models\Cliente;
+use App\Http\Controllers\Controller;
 use App\Http\Requests\StorePedidoRequest;
 use App\Http\Requests\UpdatePedidoRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Support\Facades\Auth;
+
 use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class PedidoController extends Controller
-{
+{   
+
     public function index(Request $request): View
     {
         $query = Pedido::with(['usuario', 'cliente']);
+
+        $usuario = Auth::user();
+
+        // Si NO tiene permiso para ver todos → solo sus pedidos
+        if (!$usuario || !$usuario->tienePermiso('ver_todos_pedidos')) {
+            $query->where('usuario_id', $usuario->id_usuario);
+        }
 
         // Filtros
         if ($request->filled('usuario_id')) {
@@ -49,6 +60,11 @@ class PedidoController extends Controller
         if ($request->filled('total_max')) {
             $query->where('total_pedido', '<=', $request->total_max);
         }
+
+        // Ordenar por nombre del usuario (JOIN)
+        $query->leftJoin('usuarios', 'pedido.usuario_id', '=', 'usuarios.id_usuario')
+            ->orderBy('usuarios.nombres', 'ASC')
+            ->select('pedido.*');
 
         $pedidos = $query->paginate(15)->appends($request->query());
 
@@ -95,4 +111,5 @@ class PedidoController extends Controller
         $pedido->delete(); // Soft delete
         return redirect()->route('pedidos.index')->with('success', 'Pedido eliminado lógicamente.');
     }
+
 }

@@ -18,7 +18,7 @@
                 </div>
 
                 <div class="flex gap-2">
-                    <a href="{{ route('proveedores.edit', $proveedor->id_proveedor) }}"
+                    <a href="{{ route('proveedores.edit', $proveedor) }}"
                        class="px-3 py-1.5 bg-yellow-100 text-yellow-700 text-sm rounded-md font-medium hover:bg-yellow-200 transition">
                         Editar
                     </a>

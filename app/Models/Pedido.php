@@ -4,6 +4,8 @@ namespace App\Models;
 
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\SoftDeletes;
+use Illuminate\Database\Eloquent\Relations\BelongsTo;
+use Illuminate\Database\Eloquent\Relations\HasOne;
 
 class Pedido extends Model
 {   
@@ -21,43 +23,30 @@ class Pedido extends Model
         'total_pedido',
         'estado_pedido',
         'direccion_entrega',
+        'asesor_id' // Nuevo campo
     ];
 
     protected $dates = ['deleted_at'];
 
-
-    // Pedido registrado por un usuario
-    public function usuario()
+    // Relaciones
+    public function usuario(): BelongsTo
     {
-        return $this->belongsTo(
-            Usuario::class,
-            'usuario_id',
-            'id_usuario'
-        );
+        return $this->belongsTo(Usuario::class, 'usuario_id', 'id_usuario');
     }
 
-    // Pedido pertenece a un cliente
-    public function cliente()
+    public function cliente(): BelongsTo
     {
-        return $this->belongsTo(
-            Cliente::class,
-            'cliente_id',
-            'id_cliente'
-        );
+        return $this->belongsTo(Cliente::class, 'cliente_id', 'id_cliente');
     }
 
-    // Un pedido puede generar una venta
-    public function venta()
+    public function venta(): HasOne
     {
-        return $this->hasOne(
-            Venta::class,
-            'pedido_id',
-            'id_pedido'
-        );
+        return $this->hasOne(Venta::class, 'pedido_id', 'id_pedido');
     }
 
-    public function getRouteKeyName()
+    // Asesor comercial asignado
+    public function asesor(): BelongsTo
     {
-        return 'id_pedido';
+        return $this->belongsTo(Usuario::class, 'asesor_id', 'id_usuario');
     }
 }

@@ -6,13 +6,29 @@ use App\Models\Categoria;
 use App\Http\Requests\StoreCategoriaRequest;
 use App\Http\Requests\UpdateCategoriaRequest;
 use Illuminate\Http\RedirectResponse;
+use Illuminate\Http\Request;
 use Illuminate\View\View;
 
 class CategoriaController extends Controller
 {
-    public function index(): View
+    public function index(Request $request): View
     {
-        $categorias = Categoria::withCount('productos')->paginate(15);
+        $query = Categoria::withCount('productos');
+
+        // Filtros
+        if ($request->filled('nombre_categoria')) {
+            $query->where('nombre_categoria', 'LIKE', '%' . $request->nombre_categoria . '%');
+        }
+
+        if ($request->filled('estado_categoria')) {
+            $query->where('estado_categoria', $request->estado_categoria);
+        }
+
+        // Ordenar alfabéticamente
+        $query->orderBy('nombre_categoria', 'ASC');
+
+        $categorias = $query->paginate(15)->appends($request->query());
+
         return view('categorias.index', compact('categorias'));
     }
 

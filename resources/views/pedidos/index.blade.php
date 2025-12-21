@@ -143,16 +143,16 @@
                             <td class="px-6 py-4 whitespace-nowrap">
                                 @switch($pedido->estado_pedido)
                                     @case('PENDIENTE')
-                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">Pendiente</span>
+                                        <span class="px-2 py-1 bg-yellow-100 text-yellow-800 text-xs rounded-full">PENDIENTE</span>
                                         @break
                                     @case('EN PROCESO')
-                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">En proceso</span>
+                                        <span class="px-2 py-1 bg-blue-100 text-blue-800 text-xs rounded-full">EN PROCESO</span>
                                         @break
                                     @case('ENTREGADO')
-                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">Entregado</span>
+                                        <span class="px-2 py-1 bg-green-100 text-green-800 text-xs rounded-full">ENTREGADO</span>
                                         @break
                                     @case('CANCELADO')
-                                        <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">Cancelado</span>
+                                        <span class="px-2 py-1 bg-red-100 text-red-800 text-xs rounded-full">CANCELADO</span>
                                         @break
                                 @endswitch
                             </td>

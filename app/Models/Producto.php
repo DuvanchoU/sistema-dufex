@@ -79,4 +79,24 @@ class Producto extends Model
     {
         return 'id_producto';
     }
+
+    // Si usas múltiples imágenes
+    public function imagenes()
+    {
+        return $this->hasMany(ImagenProducto::class, 'producto_id', 'id_producto');
+    }
+
+    // Accesor para obtener la URL de la imagen principal
+    public function getImagenPrincipalAttribute()
+    {
+        $principal = $this->imagenes()->where('es_principal', true)->first();
+        if ($principal) {
+            return asset('storage/' . $principal->ruta_imagen);
+        }
+        $primera = $this->imagenes()->first();
+        if ($primera) {
+            return asset('storage/' . $primera->ruta_imagen);
+        }
+        return asset('images/default-product.jpg');
+    }
 }
