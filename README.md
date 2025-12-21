@@ -70,17 +70,17 @@ Modelos interconectados:
 Diseño uniforme en todos los módulos, con colores corporativos y componentes reutilizables.
 
 ## 💻 Capturas del Sistema
-![Dashboard](capturas/dashboard.png)
+![Dashboard](capturas/dashboard.PNG)
 
-![Dashboard - Inicio de sesión](capturas/dashboard-iniciosesion.png)
+![Dashboard - Inicio de sesión](capturas/dashboard-iniciosesion.PNG)
 
-![Paginación Web](capturas/paginaweb.png)
+![Paginación Web](capturas/paginaweb.PNG)
 
-![Permisos](capturas/permisos.png)
+![Permisos](capturas/permisos.PNG)
 
-![Productos - Filtros](capturas/productos-filtros.png)
+![Productos - Filtros](capturas/productos-filtros.PNG)
 
-![Sidebar - Permisos](capturas/sidebar-permisos.png)
+![Sidebar - Permisos](capturas/sidebar-permisos.PNG)
 
 ---
 
