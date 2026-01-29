@@ -1,121 +1,143 @@
-# 🛒 DUFEX — Sistema de Gestión Comercial (ORDER RAE)
-> *Orden que vende — Desarrollado por Duvan Felipe Uribe*
+# 🛒 DUFEX — Sistema de Gestión Comercial ERP
+> *Orden que vende — Desarrollado por Duvan Felipe Uribe Tejada*
 
 ---
 
-## Descripción General
+## 📋 Descripción General
 
-**DUFEX** es un sistema de gestión integral para pequeñas y medianas empresas del sector muebles y hogar, diseñado para gestionar:
+DUFEX es un sistema de gestión comercial integral (ERP) desarrollado desde cero para pequeñas y medianas empresas del sector muebles y hogar. Es una solución completa que automatiza y optimiza todos los procesos comerciales de una empresa, desde el control de inventario hasta la gestión de ventas, compras, producción y usuarios.
 
-- Productos y categorías  
-- Inventario y bodegas  
-- Compras y proveedores  
-- Ventas, pedidos y clientes  
-- Producción y usuarios  
-- Permisos y roles  
-
-Todo ello con una **interfaz moderna, responsive y funcional**, basada en **filtros multicriterio horizontales**, **dashboard visual con gráficos interactivos** y **control de acceso por roles y permisos**.
-
-Este proyecto fue construido a partir de una **base de datos real migrada a Laravel**, con énfasis en **buenas prácticas de modelado relacional, seguridad y usabilidad**.
+El sistema cuenta con una interfaz moderna, responsive y profesional, basada en filtros multicriterio horizontales, dashboard visual con métricas clave, modo oscuro, y control de acceso granular por roles y permisos.
 
 ---
 
-## Arquitectura y Tecnologías
+## 📦 Módulos Implementados
 
-### Backend
-- **Laravel 12** — Framework PHP moderno, estructurado y escalable.
-- **Eloquent ORM** — Modelos con relaciones complejas (belongsTo, hasMany, belongsToMany).
-- **Soft Deletes** — Eliminación lógica en todas las entidades clave.
-- **Validaciones personalizadas** — Reglas de negocio en Request y Controlador.
-- **Middleware de permisos** — Control de acceso granular por rol y acción.
-- **Migraciones y Seeders** — Base de datos estructurada y poblada automáticamente.
-- **Vistas SQL** — Consultas optimizadas para reportes de ventas y análisis.
-
-### Frontend
-- **Tailwind CSS** — Estilos modernos, responsivos y coherentes.
-- **Feather Icons / Chart.js** — Interfaz visual con iconos y gráficos dinámicos.
-- **Blade Templates** — Estructura modular y reutilizable.
-- **Filtros Multicriterio Horizontales** — Búsqueda avanzada en todos los módulos.
-- **Dashboard con Gráficos** — Visualización de métricas clave (ventas mensuales, productos por categoría, estado de ventas).
-
-### Funcionalidades Clave
-
-**Filtros Avanzados**  
-Cada módulo (Productos, Clientes, Compras, Ventas, etc.) cuenta con un panel de filtros horizontal que permite buscar por múltiples criterios (fechas, rangos numéricos, texto parcial, estados, relaciones).
-
-**Dashboard Visual**  
-Panel de control con:
-- Tarjetas de métricas (total de productos, ventas, usuarios, etc.)
-- Gráficos de líneas (ventas mensuales)
-- Gráficos de barras (pedidos por mes)
-
-**Control de Acceso por Roles y Permisos**  
-Sistema de autorización flexible:
-- Roles (Gerente, Asesor, Jefe Logistico, etc.)
-- Permisos granulares (ver_productos, crear_ventas, editar_clientes, etc.)
-- Sidebar dinámico que muestra solo los módulos permitidos.
-- Nombre y rol del usuario visible en el sidebar.
-
-**Eliminación Lógica y Auditoría**  
-Todos los módulos principales soportan `SoftDeletes`, manteniendo integridad referencial y permitiendo recuperación de registros.
-
-**Relaciones Complejas**  
-Modelos interconectados:
-- Producto → Categoría, Inventario, DetalleVenta, DetalleCompra
-- Pedido → Cliente, Usuario, Venta
-- Compra → Proveedor, Usuario, DetalleCompra
-- Inventario → Producto, Bodega, Proveedor
-
-**Interfaz Consistente y Profesional**  
-Diseño uniforme en todos los módulos, con colores corporativos y componentes reutilizables.
-
-## 💻 Capturas del Sistema
-![Dashboard](capturas/dashboard.PNG)
-
-![Dashboard - Inicio de sesión](capturas/dashboard-iniciosesion.PNG)
-
-![Paginación Web](capturas/paginaweb.PNG)
-
-![Permisos](capturas/permisos.PNG)
-
-![Productos - Filtros](capturas/productos-filtros.PNG)
-
-![Sidebar - Permisos](capturas/sidebar-permisos.PNG)
+| Módulo | Funcionalidad Principal |
+|--------|------------------------|
+| **Dashboard** | Panel de control con métricas y gráficos |
+| **Productos** | Gestión de catálogo, categorías y stock |
+| **Inventario** | Control de bodegas y movimientos |
+| **Compras** | Proveedores y órdenes de compra |
+| **Ventas** | Pedidos, facturación y reportes |
+| **Producción** | Planificación y seguimiento |
+| **Clientes** | CRM con historial de compras |
+| **Usuarios & Roles** | Control de acceso granular |
 
 ---
 
-## Autor
+## 🏗️ Arquitectura y Tecnologías
 
-**Duvan Felipe Uribe**  
-Estudiante de Análisis y Desarrollo de Software — SENA  
-📍 Colombia | Bogotá
+### 🔙 Backend
+- **Laravel 12** — Framework PHP moderno y escalable
+- **Eloquent ORM** — Relaciones complejas (belongsTo, hasMany, belongsToMany)
+- **Spatie Permission** — Control de acceso por roles y permisos
+- **Soft Deletes** — Eliminación lógica en entidades críticas
+- **Form Requests** — Validaciones centralizadas
+- **Middleware** — Protección de rutas
+- **Migraciones y Seeders** — Base de datos versionada
+- **Vistas SQL** — Consultas optimizadas para reportes
 
----
+### 🎨 Frontend
+- **Tailwind CSS** — Diseño moderno y responsive
+- **Blade Templates** — Vistas modulares y reutilizables
+- **Chart.js** — Gráficos dinámicos en dashboard
+- **Feather Icons** — Iconografía profesional
+- **Modo Oscuro/Claro** — Toggle con persistencia
 
-## ¿Cómo usarlo?
-
-1. Clona el repositorio.
-2. Ejecuta `composer install`.
-3. Configura `.env` con tus credenciales de MySQL.
-4. Ejecuta `php artisan migrate --seed`.
-5. Ejecuta `npm install && npm run dev` (si necesitas compilar assets).
-6. Ejecuta `php artisan serve`.
-7. Accede a `http://localhost:8000` y ¡listo!
-
----
-
-## Aprendizajes Clave
-
-Este proyecto demuestra mi capacidad para:
-
-- Diseñar y modelar bases de datos relacionales complejas.
-- Implementar patrones de diseño (CRUD, Repository, Service Layer implícito).
-- Gestionar permisos y roles con lógica de negocio.
-- Crear interfaces web modernas y funcionales con Laravel + Tailwind.
-- Optimizar consultas con vistas SQL y relaciones Eloquent.
-- Aplicar buenas prácticas de seguridad y mantenibilidad.
+### 🗄️ Base de Datos
+- **MySQL** — Base de datos relacional
+- **MySQL Workbench** — Diseño y gestión
+- **Relaciones complejas** — Integridad referencial
 
 ---
 
-> 🚀 DUFEX es el núcleo de un sistema comercial en evolución, que seguiré desarrollando hasta convertirlo en un software listo para el mercado. Cada línea de código refleja mi compromiso con la calidad, la escalabilidad y la solución de problemas reales para diferentes sectores.
+## 🌟 Características Principales
 
+### 🔍 Filtros Multicriterio Avanzados
+
+Cada módulo incluye un panel de filtros horizontal para búsqueda avanzada:
+
+**Productos:** categoría, precio, stock, estado  
+**Compras:** proveedor, usuario, método de pago, estado, fecha, total  
+**Ventas:** cliente, usuario, método de pago, estado, fecha, total  
+**Pedidos:** cliente, estado, fecha, total  
+
+**Tipos de filtros:**
+- ✅ Búsqueda por texto parcial
+- ✅ Rangos de fechas
+- ✅ Estados (activo, pendiente, completado, etc.)
+- ✅ Relaciones entre entidades
+- ✅ Rangos numéricos (precios, cantidades, totales)
+
+### 🌓 Modo Oscuro / Claro
+
+DUFEX incluye un sistema completo de temas con:
+
+- **Toggle de modo** en el sidebar para cambiar entre Light/Dark Mode
+- **Logo dinámico** que se adapta automáticamente al tema seleccionado
+- **Colores optimizados** para mejor legibilidad en ambos modos
+- **Persistencia del tema** en localStorage para mantener la preferencia del usuario
+
+**Mejoras de UI/UX:**
+- ✅ Tablas minimalistas y estrechas para mejor legibilidad
+- ✅ Botón "VER" con color distintivo `#B3B792`
+- ✅ Header de BODEGAS con tono blanco-gris
+- ✅ Mensajes de éxito/error centrados y visibles
+- ✅ Elementos de interfaz con tonos grises y neutros
+
+### 🔐 Control de Acceso por Roles y Permisos
+
+Sistema de autorización avanzado basado en Spatie Permissions:
+
+- **Roles configurables** (Gerente, Asesor, Jefe Logístico, etc.)
+- **Permisos por acción** (ver, crear, editar, eliminar)
+- **Permisos específicos:** `ver_compras`, `eliminar_compras`, `ver_productos`, `ver_roles`, `ver_ventas`, `ver_todos_pedidos`, `editar_roles`
+- **Sidebar dinámico** que muestra solo los módulos permitidos
+- **Nombre y rol del usuario** visibles en la interfaz
+
+### ♻️ Eliminación Lógica y Auditoría
+
+Todos los módulos principales soportan `SoftDeletes`, manteniendo integridad referencial y permitiendo recuperación de registros:
+
+- `Categoria`, `Producto`, `Bodega`, `Cliente`
+- `Venta`, `Compra`, `Inventario`, `Pedido`, `Producción`
+
+### 🔗 Relaciones Complejas entre Modelos
+
+Ejemplos:
+- **Producto** → Categoría, Inventario, DetalleVenta, DetalleCompra
+- **Pedido** → Cliente, Usuario, Venta
+- **Compra** → Proveedor, Usuario, DetalleCompra
+- **Inventario** → Producto, Bodega, Proveedor
+
+---
+
+## 👨‍💻 Autor
+
+**Duvan Felipe Uribe Tejada**  
+🎓 Estudiante de Tecnólogo en Análisis y Desarrollo de Software — SENA  
+📍 Colombia | Bogotá  
+📧 duvanfuribe@gmail.com  
+🔗 [LinkedIn](https://www.linkedin.com/in/duvan-felipe-uribe-758303359/)  
+💼 [Computrabajo](https://candidato.co.computrabajo.com/candidate/cv/edit/?idapp=3&f=FEE939887FF3D46C)
+
+---
+
+## 🎯 Buscando Oportunidades
+
+Estoy activamente buscando oportunidades como:
+- 🎓 **Practicante** en desarrollo de software
+- 🎓 **Pasante** en proyectos tecnológicos  
+- 👨‍💻 **Desarrollador Junior** Full Stack
+
+**¿Qué ofrezco?**
+- ✨ Actitud proactiva y hambre de aprender
+- 🤝 Facilidad para trabajo en equipo
+- 🐛 Resolución efectiva de problemas
+- 💡 Comprensión de procesos de negocio reales (muebles, textiles, construcción)
+- 🚀 Capacidad para aportar desde el primer día con Laravel y arquitectura MVC
+
+---
+
+> 🚀 **DUFEX** es el núcleo de un sistema comercial en evolución, que seguiré desarrollando hasta convertirlo en un software listo para el mercado. Cada línea de código refleja mi compromiso con la calidad, la escalabilidad y la solución de problemas reales para diferentes sectores.
